@@ -8,17 +8,25 @@ resource "aws_launch_template" "example" {
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.instance.id]
 
-  user_data = base64encode(<<-EOF
-    #!/bin/bash
-    yum update -y
-    yum install -y httpd
-    systemctl start httpd
-    systemctl enable httpd
-    echo "Hello, world!" > /var/www/html/index.html
-    echo "${data.terraform_remote_state.db.outputs.address}" >> /var/www/html/index.html
-    echo "${data.terraform_remote_state.db.outputs.port}" >> /var/www/html/index.html
-    EOF
-  )
+#  User data before moving into user-data.sh 
+#  user_data = base64encode(<<-EOF
+#    #!/bin/bash
+#    yum update -y
+#    yum install -y httpd
+#    systemctl start httpd
+#    systemctl enable httpd
+#    echo "Hello, world!" > /var/www/html/index.html
+#    echo "${data.terraform_remote_state.db.outputs.address}" >> /var/www/html/index.html
+#    echo "${data.terraform_remote_state.db.outputs.port}" >> /var/www/html/index.html
+#    EOF
+#  )
+# Render the User Data script as a template
+  user_data = base64encode(templatefile("user-data.sh", {
+    server_port = var.server_port
+    db_address  = data.terraform_remote_state.db.outputs.address
+    db_port     = data.terraform_remote_state.db.outputs.port
+  })
+)
 
   lifecycle {
     create_before_destroy = true
