@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 data "aws_security_group" "existing_sg" {
-  name = "Luxembourg"
+  name = "launch-wizard-2"
 }
 
 resource "aws_instance" "example" {
