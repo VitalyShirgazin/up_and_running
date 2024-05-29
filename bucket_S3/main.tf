@@ -42,6 +42,7 @@ attribute {
     type = "S" 
     }
 }
+# Unconnent this block to use remote state
 #terraform {
 #    backend "s3" {
       # Replace this with your bucket name!
