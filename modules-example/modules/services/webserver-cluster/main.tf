@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.16"
+    }
+  }
+  required_version = ">= 1.2.0"
+}
+
 resource "aws_launch_template" "example" {
   name_prefix   = "example-"
   image_id      = "ami-0bb84b8ffd87024d8"
